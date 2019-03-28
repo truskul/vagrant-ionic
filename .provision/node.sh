@@ -9,4 +9,6 @@ nvm install node
 nvm install 8
 nvm alias default 8
 npm i -g ionic cordova
-
+npm install -g npm
+npm install -g firebase-tools
+npm install -g firebase

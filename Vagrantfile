@@ -3,14 +3,7 @@
 
 VAGRANTFILE_API_VERSION = "2"
 
-$init = <<SCRIPT
-sudo /home/vagrant/android-sdk-linux/platform-tools/adb kill-server
-sudo /home/vagrant/android-sdk-linux/platform-tools/adb start-server
-sudo /home/vagrant/android-sdk-linux/platform-tools/adb devices
-sudo service nginx start
-SCRIPT
-
-Vagrant.configure(2) do |config|
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "ubuntu/trusty64"
 
@@ -19,8 +12,6 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision :shell, :path => ".provision/dependencies.sh", privileged: false
   config.vm.provision :shell, :path => ".provision/node.sh", privileged: false
-  config.vm.provision :shell, :path => ".provision/android.sh", privileged: false
-  config.vm.provision :shell, run: "always", inline: $init
 
   config.vm.network :private_network, ip: "192.168.2.2"
   config.vm.network "forwarded_port", guest: 35729, host: 35729, auto_correct: true
@@ -33,12 +24,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.hostname = "BoK-Ionic-Box"
   config.vm.provider :virtualbox do |vb|
-    vb.name = "BoK Ionic Box"
+    vb.name = "Brandon VBox"
     vb.customize ['modifyvm', :id, '--memory', '2048']
     vb.customize ["modifyvm", :id, "--usb", "on"]
-    vb.customize ["usbfilter", "add", "0", "--target", :id, "--name", "android", "--vendorid", "0x18d1"]
-	# Need This If On Windows
-    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]	
   end
 
 end
